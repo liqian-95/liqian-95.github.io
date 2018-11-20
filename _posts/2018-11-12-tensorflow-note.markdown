@@ -6,7 +6,7 @@ date:       2018-11-12
 author:     "Qian"
 header-img: "img/in-post/post-bg-tensorflow.jpg"
 tags:
-    - Tensorflow
+    - tensorflow
 ---
 
 > 初识Tensorflow

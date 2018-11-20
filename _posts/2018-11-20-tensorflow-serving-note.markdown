@@ -68,7 +68,7 @@ builder.save()
 
 分享几个网上存在一些已经存放的模型的docker镜像：
 
-## https://gyang274.github.io/tensorflow-serving-tutorial/  quick start
+## [tensorflow-serving-tutorial](https://gyang274.github.io/tensorflow-serving-tutorial/)  quick start
 
 
 ### Docker Run Image
@@ -141,4 +141,38 @@ response = requests.post(
 
 print(response.json())
 ```
+
+## [GraphPipe](https://gyang274.github.io/tensorflow-serving-tutorial/) 
+
+![](/img/in-post/post-tensorflow/graphpipe.jpg)
+
+```
+docker run -it --rm \
+    -e https_proxy=${https_proxy} \
+    -p 9000:9000 \
+    sleepsonthefloor/graphpipe-tf:cpu \
+    --model=https://oracle.github.io/graphpipe/models/squeezenet.pb \
+    --listen=0.0.0.0:9000
+```
+
+oracle开源的GraphPipe protocol采用一种基于flatbuffer的低开销数据格式，它实现了高效的序列化/反序列化操作。不同于tensorflow使用的protocol buffer。此外，GraphPipe提供了用go编写的参考模型服务器，以简化部署机器学习模型的过程。根据经验，将现有的模型转换成通用的格式可能会涉及很多缺陷。因此，GraphPipe提供了能够本地运行最常见的ML模型格式的模型服务器。
+
+GraphPipe设计模型服务器的目标：
++ Excellent performance
++ Simple, documented build process
++ Flexible code that is easy to work with
++ Support for the most common ML Frameworks
++ Optimized cpu and gpu support
+
+使用tensorflow模型，有以下两种docker镜像提供：
+
+    docker pull sleepsonthefloor/graphpipe-tf:cpu
+    docker pull sleepsonthefloor/graphpipe-tf:gpu
+
+支持的tensorflow模型格式：
++ SavedModel format - the tensorflow-serving directory format
++ GraphDef (.pb) format. 这只是将graphdef序列化为原生buf。如果您试图生产Keras模型，这是最容易生成的格式。
+
+
+
 
