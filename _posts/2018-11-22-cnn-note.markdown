@@ -1,0 +1,10 @@
+---
+layout:     post
+title:      "CNN"
+subtitle:   "最基础的知识记录"
+date:       2018-11-22
+author:     "Qian"
+header-img: "img/in-post/post-bg-tensorflow.jpg"
+tags:
+    - ML
+---

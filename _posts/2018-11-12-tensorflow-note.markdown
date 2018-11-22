@@ -112,3 +112,32 @@ print(sess.run(y,feed_dict={x: [[0.7,0.9]]}))
 在迭代训练过程中，学习率既不能过大，也不能过小。为了解决设定学习率的问题， TensorFlow 提供了一种更加灵活的学习率设置方法一一指数衰减法。tf.train.exponential_decay函数实现了指数衰减学习率。通过这个函数，可以先使用较大的学习率来快速得到一个比较优的解，然后随着迭代的继续逐步减小学习率，使得模型在训练后期更加稳定。
 
 为了避免过拟合问题， 一个非常常用的方法是正则化（regul arization）。正则化的思想就是在损失函数中加入刻画模型复杂程度的指标。假设用于刻画模型在训练数据上表现的损失函数为J(θ)，那么在优化时不是直接J(θ)，而是优化J(θ)＋λR(w)。其中R(w)刻画的是模型的复杂程度，而λ表示模型复杂损失在总损失中的比例。注意这里θ表示的是一个神经网络中所有的参数，它包括边上的权重w 和偏置项b。一般来说模型复杂度只由权重w决定。其基本的思想都是希望通过限制权重的大小，使得模型不能任意拟合训练数据中的随机噪音。
+
+## tensorflow使用
+
+### 模型
+
+模型持久化保存方式，这段代码会生成的第一个文件为model.ckpt.meta，它保存了TensorFlow 计算图的结构，可以简单理解为神经网络的网络结构。第二个文件为model.ckpt，这个文件中保存了TensorFlow 程序中每一个变量的取值。最后一个文件为checkpoint文件，这个文件中保存了一个目录下所有的模型文件列表。
+
+```
+import tensorflow as tf
+# 声明训练推理过程
+......
+
+# 声明tf . train . Saver 类用于保存模型。
+saver= tf.train.Saver()
+with tf.Session() as sess :
+    sess.run(...)
+    # 将模型保存到/path/to/model/model.ckpt文件。
+    saver.save(sess ,"/path/to/model/model.ckpt")
+```
+
+加载持久化图的方式为：
+
+```
+import tensorflow as tf
+# 直接加载持久化的图。
+saver = tf.train.import_meta_graph("/path/to/model/model.ckpt/model.ckpt.meta” )
+with tf.Session() as sess :
+    saver.restore(sess , "/path/to/model/model.ckpt")
+```
