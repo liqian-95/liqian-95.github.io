@@ -1,0 +1,59 @@
+---
+layout:     post
+title:      "zabbix"
+subtitle:   "系统监控器"
+date:       2018-12-13
+author:     "Qian"
+# header-img: "img/in-post/post-bg-tensorflow.jpg"
+tags:
+    - edge
+---
+
+
+## zabbix概念
+
+一套开源监控系统，能从各个host中收集数据到zabbix-server，host包括设备、系统或应用程序，一般情况下，通常将zabbix-agent部署在被监控主机上，由agent采集数据，报告给负责监控的server，并将信息存储到zabbix的数据库中。
+
+当需要监控的设备数量及其庞大时，zabbix提供了zabbix-proxy来分摊监控压力，成千上万台被监控对象分成不同的区域，每个区域中设置一台代理主机，及zabbix-proxy，将收集的信息统一提交给真正的zabbix-server处理。
+
+### 安装
+
+ubuntu16.04安装
+```
+# wget https://repo.zabbix.com/zabbix/4.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_4.0-2+xenial_all.deb
+# dpkg -i zabbix-release_4.0-2+bionic_all.deb
+# apt update
+```
+
+Server/proxy/frontend(控制台)/agent 安装
+```
+# apt install zabbix-server-mysql
+# apt install zabbix-proxy-mysql
+# apt install zabbix-frontend-php
+# apt install zabbix-agent
+```
+
+此外还有一些终端控制工具：zabbix-get、zabbix-sender
+
+创建初始化数据库
+```
+# mysql -uroot -p
+password
+mysql> create database zabbix character set utf8 collate utf8_bin;
+mysql> grant all privileges on zabbix.* to zabbix@localhost identified by 'password';
+mysql> quit;
+```
+
+导入初始模型和数据
+```
+# zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p zabbix
+```
+
+修改配置，重启服务
+```
+/etc/zabbix/zabbix_server.conf
+DBPassword=password
+
+/etc/zabbix/apache.conf
+php_value date.timezone Asia/Shanghai
+```
