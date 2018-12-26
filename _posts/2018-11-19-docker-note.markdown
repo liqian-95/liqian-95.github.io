@@ -191,6 +191,26 @@ $ docker images
 $ docker run -t -i runoob/centos:6.7  /bin/bash
 ```
 
+docker配置代理（有些镜像来自于google hub，如kubernetes所用镜像）：
+
+对于这种情况，一种解决办法是在dockerhub中找到对应的所需镜像版本，从dockerhub pull，或者配置代理
+
+```
+# 在/etc/systemd/system/创建docker.service.d文件夹
+$ sudo mkdir -p /etc/systemd/system/docker.service.d
+
+# 在/etc/systemd/system/docker.service.d/文件夹内创建http-proxy.conf，并编辑
+$ sudo touch /etc/systemd/system/docker.service.d/http-proxy.conf
+# cat <<EOF >>/etc/systemd/system/docker.service.d/http-proxy.conf
+> [Service]
+> Environment="HTTP_PROXY=http://ip:port/" "NO_PROXY=localhost,127.0.0.1,docker-registry.somecorporation.com[私有仓库]"
+> EOF
+
+# 重启
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+```
+
 ## 认识Dockerfile
 ### 说明
 

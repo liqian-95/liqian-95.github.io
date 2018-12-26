@@ -57,3 +57,11 @@ DBPassword=password
 /etc/zabbix/apache.conf
 php_value date.timezone Asia/Shanghai
 ```
+
+### 使用
+
+配置主机
+
+配置监控项
+
+配置触发器
